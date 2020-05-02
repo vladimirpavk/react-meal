@@ -4,21 +4,38 @@ import {
   Text,
   View,
   Button,
-  FlatList
+  FlatList,
+  TouchableOpacity
 } from 'react-native';
 
 import { CATEGORIES } from '../data/dummy-data';
-
-const renderGridItem = itemData => {
-  console.log(itemData.item);
-  return (
-    <View style={[styles.gridItem, {backgroundColor: `${itemData.item.color}`}]}>
-      <Text style={styles.gridItemContent}>{itemData.item.name}</Text>
-    </View>
-  );
-};
+import Colors from '../data/ColorPalete';
 
 const CategoriesScreen = props => {
+  
+  const renderGridItem = itemData => { 
+    return (      
+      <TouchableOpacity
+        style={styles.opacityStyle}
+        onPress={()=>categoryClicked(itemData.item.id)}>
+        <View style={[styles.gridItem, {backgroundColor: `${itemData.item.color}`}]}>
+          <Text style={styles.gridItemContent}>{itemData.item.name}</Text>
+        </View>
+      </TouchableOpacity>
+    );
+  };
+
+  const categoryClicked = (categoryId)=>{    
+    props.navigation.navigate(
+      {
+        routeName: 'CategoryMeals',
+        params: {
+          categoryId:categoryId
+        }
+      }
+    );
+  }
+
   return (
     <View style={styles.screen}>
       <FlatList
@@ -32,13 +49,19 @@ const CategoriesScreen = props => {
   );
 };
 
+CategoriesScreen.navigationOptions = {
+  headerTitle: 'Meal Categories',
+  headerStyle: {
+    backgroundColor: '#4a148c'
+  },
+  headerTintColor: 'white'
+}
+
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center',
-    borderWidth: 1,
-    borderColor: 'black',
+    alignItems: 'center',  
     backgroundColor: 'white'
   },
   flatStyle:{
@@ -47,9 +70,8 @@ const styles = StyleSheet.create({
   },
   gridItem: {
     flex: 1,
-    margin: 15,
-    height: 150,
     padding: 15,
+    margin: 15,
     justifyContent: 'center',
     alignItems: 'center'
   },
@@ -60,6 +82,11 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontWeight: 'bold',
     fontStyle: 'open-sans-bold'
+  },
+  opacityStyle:{    
+    flex: 1,
+    padding: 0,
+    height: 200
   }
 });
 

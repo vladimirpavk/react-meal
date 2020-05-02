@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, Text, View, Button } from 'react-native';
 
 const CategoryMealsScreen = (props) => {
-  console.log('Category meals', props);
+  console.log('Category meals', props.navigation.getParam('categoryId'));
 
   const navigateMealDetail = ()=>{
     props.navigation.navigate('MealDetail');
