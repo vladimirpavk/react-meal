@@ -43,19 +43,10 @@ const CategoriesScreen = props => {
         keyExtractor={(item, index) => item.id}
         data={CATEGORIES}
         renderItem={renderGridItem}
-        numColumns={2}
-      />
+        numColumns={2}/>
     </View>
   );
 };
-
-CategoriesScreen.navigationOptions = {
-  headerTitle: 'Meal Categories',
-  headerStyle: {
-    backgroundColor: '#4a148c'
-  },
-  headerTintColor: 'white'
-}
 
 const styles = StyleSheet.create({
   screen: {
