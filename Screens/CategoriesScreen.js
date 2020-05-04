@@ -63,16 +63,18 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 15,
     margin: 15,
-    justifyContent: 'center',
-    alignItems: 'center'
+    justifyContent: 'flex-end',
+    alignItems: 'flex-end',
+    borderRadius: 15
   },
   gridItemContent:{   
     justifyContent: 'center',
     width: '100%',
     color: 'black',
-    textAlign: 'center',
+    textAlign: 'right',
     fontWeight: 'bold',
-    fontStyle: 'open-sans-bold'
+    fontStyle: 'open-sans-bold',
+    fontSize: 16
   },
   opacityStyle:{    
     flex: 1,
