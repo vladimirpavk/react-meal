@@ -1,4 +1,4 @@
-class Meal {
+export class Meal {
   constructor(
     id,
     categoryIds,
@@ -29,5 +29,3 @@ class Meal {
     this.isLactoseFree = isLactoseFree;
   }
 }
-
-export default Meal;
