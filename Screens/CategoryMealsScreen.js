@@ -13,13 +13,21 @@ import { MEALS } from '../data/dummy-data';
 
 const CategoryMealsScreen = (props) => {  
 
-  const onMealPressed = (mealInfo)=>{
-    console.log(mealInfo);
+  const onMealPressed = (mealId)=>{
+    //console.log(mealId);
+    props.navigation.navigate(
+      {
+        routeName: 'MealDetail',
+        params: {
+          mealId: mealId
+        }
+      }
+    );
   }
   
   const renderListItem = (item)=>{
     return(
-      <TouchableOpacity onPress={()=>onMealPressed(item)}>
+      <TouchableOpacity onPress={()=>onMealPressed(item.item.id)}>
         <View style={styles.listItem}>
           <ImageBackground
             source={{uri: `${item.item.imageUrl}`}}
