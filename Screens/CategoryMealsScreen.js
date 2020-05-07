@@ -11,6 +11,8 @@ import {
 import { CATEGORIES } from '../data/dummy-data';
 import { MEALS } from '../data/dummy-data';
 
+import MealItem from '../components/MealItem';
+
 const CategoryMealsScreen = (props) => {  
 
   const onMealPressed = (mealId)=>{
@@ -27,24 +29,13 @@ const CategoryMealsScreen = (props) => {
   
   const renderListItem = (item)=>{
     return(
-      <TouchableOpacity onPress={()=>onMealPressed(item.item.id)}>
-        <View style={styles.listItem}>
-          <ImageBackground
-            source={{uri: `${item.item.imageUrl}`}}
-            style={styles.listItemImage}>
-              <Text
-                style={styles.listItemImageText}
-                align='center'>
-                {item.item.title}
-              </Text>
-          </ImageBackground>
-          <View style={styles.listItemInfo}>
-            <Text style={styles.listItemInfoText}>{item.item.duration}</Text>
-            <Text style={styles.listItemInfoText}>{item.item.complexity.toUpperCase()}</Text>
-            <Text style={styles.listItemInfoText}>{item.item.affordability.toUpperCase()}</Text>
-          </View>
-        </View>
-      </TouchableOpacity>
+        <MealItem
+        onMealPressed={()=>onMealPressed(item.item.id)}
+        imageUrl={item.item.imageUrl}
+        mealTitle={item.item.title}
+        duration={item.item.duration}
+        complexity={item.item.complexity}
+        affordability={item.item.affordability} />
     )
   }
 
@@ -83,33 +74,6 @@ const styles = StyleSheet.create({
   },
   flatListStyle:{
     flex:1
-  },
-  listItem:{
-    width: '100%',
-    height: '200px',
-    marginTop: 15
-  },
-  listItemImage:{
-    flex: 1,
-    justifyContent: 'flex-end'
-  },
-  listItemImageText:{
-    fontWeight: 'bold',
-    fontStyle: 'open-sans-bold',
-    fontSize: 20,
-    color: 'white',
-    backgroundColor: 'rgba(0, 0, 0, 0.4)'
-  },
-  listItemInfo:{
-    height: '25px',
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    backgroundColor: 'rgba(200, 200, 200, 0.3)'
-  },
-  listItemInfoText:{
-    fontWeight: 'bold',
-    fontStyle: 'open-sans-bold',
-    fontSize: 15
   }
 });
 
