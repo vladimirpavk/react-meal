@@ -5,18 +5,19 @@ import {
   View,
   ScrollView
 } from 'react-native';
+
+import { connect, useSelector } from 'react-redux';
+
 import { MaterialIcons } from '@expo/vector-icons';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 
 import { MaterialIconHeaderButton } from '../components/MaterialIconHeaderButton';
 import MealItem from '../components/MealItem';
 
-import { MEALS } from '../data/dummy-data';
-
-const MealDetailsScreen = (props) => {
+const MealDetailsScreen = (props) => {  
   
   const mealId = props.navigation.getParam('mealId');
-  const mealTemp = MEALS.filter(
+  const mealTemp = props.meals.filter(
     (meal)=>{
       return meal.id===mealId
     }
@@ -56,8 +57,10 @@ const MealDetailsScreen = (props) => {
 }
 
 MealDetailsScreen.navigationOptions = (navigationData)=>{
+  const meals = useSelector(state=>state.meals);
+
   const mealId = navigationData.navigation.getParam('mealId');
-  const meal = MEALS.filter(
+  const meal = meals.filter(
     (meal)=>{
       return meal.id===mealId
     }
@@ -104,4 +107,10 @@ const styles = StyleSheet.create({
   }
 });
 
-export default MealDetailsScreen;
+const mapPropsToState = (state)=>{
+  return{
+    meals: state.meals
+  }
+}
+
+export default connect(mapPropsToState)(MealDetailsScreen);

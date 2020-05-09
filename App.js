@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
+import { createStore } from 'redux';
+import { Provider } from 'react-redux';
+import { reducer } from './store/reducers/meals';
+
 import * as Fonts from 'expo-font';
 import { AppLoading } from 'expo';
 
@@ -25,8 +29,12 @@ export default function App() {
     )
   }
 
+  const store=createStore(reducer, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
+
   return (
-    <MealsNavigator />
+    <Provider store={ store }>
+      <MealsNavigator />
+    </Provider>
   );
 }
 

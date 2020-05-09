@@ -8,8 +8,9 @@ import {
   TouchableOpacity
 } from 'react-native';
 
+import { connect } from 'react-redux';
+
 import { CATEGORIES } from '../data/dummy-data';
-import { MEALS } from '../data/dummy-data';
 
 import MealItem from '../components/MealItem';
 
@@ -39,7 +40,7 @@ const CategoryMealsScreen = (props) => {
     )
   }
 
-  let filteredMeals = MEALS.filter(
+  let filteredMeals = props.meals.filter(
     (item)=>
     {
       return item.categoryIds.indexOf(props.navigation.getParam('categoryId'))!==-1 ? true : false        
@@ -77,4 +78,10 @@ const styles = StyleSheet.create({
   }
 });
 
-export default CategoryMealsScreen;
+const mapPropsToState = (state)=>{
+    return{
+        meals: state.meals
+    }
+}
+
+export default connect(mapPropsToState)(CategoryMealsScreen);
