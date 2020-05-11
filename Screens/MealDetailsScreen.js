@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   StyleSheet,
   Text,
@@ -6,24 +6,25 @@ import {
   ScrollView
 } from 'react-native';
 
-import { connect, useSelector } from 'react-redux';
+import { connect } from 'react-redux';
 
 import { MaterialIcons } from '@expo/vector-icons';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
-
 import { MaterialIconHeaderButton } from '../components/MaterialIconHeaderButton';
+
 import MealItem from '../components/MealItem';
 
 const MealDetailsScreen = (props) => {  
-  
   const mealId = props.navigation.getParam('mealId');
-  const mealTemp = props.meals.filter(
-    (meal)=>{
-      return meal.id===mealId
-    }
-  );
+  const mealTemp = props.meals.filter((element)=>element.id===mealId);
+  
+  const meal = mealTemp[0];
 
-  const meal=mealTemp[0];
+  useEffect(
+    ()=>{
+      props.navigation.setParams({mealTitle: meal.title})
+    }, [meal]
+  );
 
   const ingredientsList = meal.ingredients.map(
     (ingredient)=><Text key={Math.random()} style={styles.item}>{ingredient}</Text>
@@ -56,18 +57,9 @@ const MealDetailsScreen = (props) => {
   );
 }
 
-MealDetailsScreen.navigationOptions = (navigationData)=>{
-  const meals = useSelector(state=>state.meals);
-
-  const mealId = navigationData.navigation.getParam('mealId');
-  const meal = meals.filter(
-    (meal)=>{
-      return meal.id===mealId
-    }
-  )[0];
-
+MealDetailsScreen.navigationOptions = (navigationData)=>{  
   return {
-    headerTitle: meal.title,
+    headerTitle: navigationData.navigation.getParam('mealTitle'),
     headerRight: ()=>(
       <HeaderButtons HeaderButtonComponent={MaterialIconHeaderButton}>             
         <Item title="favorite" iconName="favorite-border" onPress={() => alert('search border')} />
@@ -107,10 +99,10 @@ const styles = StyleSheet.create({
   }
 });
 
-const mapPropsToState = (state)=>{
+const mapStateToProps = (state)=>{
   return{
     meals: state.meals
   }
 }
 
-export default connect(mapPropsToState)(MealDetailsScreen);
+export default connect(mapStateToProps)(MealDetailsScreen);

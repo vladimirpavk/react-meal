@@ -3,6 +3,7 @@ import React from 'react';
 import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
+import { createDrawerNavigator } from 'react-navigation-drawer';
 
 import { Ionicons } from '@expo/vector-icons';
 
@@ -10,14 +11,25 @@ import CategoriesScreen from '../Screens/CategoriesScreen';
 import CategoryMealsScreen from '../Screens/CategoryMealsScreen';
 import MealDetailScreen from '../Screens/MealDetailsScreen';
 import FavoritesScreen from '../Screens/FavoritesScreen';
+import FiltersScreen from '../Screens/FiltersScreen';
 
-const MealsNavigator = createStackNavigator({
+import { MaterialIcons } from '@expo/vector-icons';
+import { HeaderButtons, Item } from 'react-navigation-header-buttons';
+import { MaterialIconHeaderButton } from '../components/MaterialIconHeaderButton';
+
+
+const MealsStackNavigator = createStackNavigator({
     'Categories' : {
         screen: CategoriesScreen,
-        navigationOptions: {
-            headerTitle: 'Meal Categories'
-        }
-    },
+        navigationOptions: (navigationData)=>{
+            return{
+                headerTitle: 'Meal Categories',
+                headerLeft: ()=>(
+                    <HeaderButtons HeaderButtonComponent={MaterialIconHeaderButton}>             
+                        <Item title="favorite" iconName="menu" onPress={()=>navigationData.navigation.toggleDrawer()} />
+                    </HeaderButtons>)
+            }            
+        }},
     'CategoryMeals': CategoryMealsScreen,
     'MealDetail': MealDetailScreen
 },
@@ -30,9 +42,31 @@ const MealsNavigator = createStackNavigator({
     }
 });
 
+const FiltersStackNavigation = createStackNavigator({
+    'Filters': {
+        screen: FiltersScreen,
+        navigationOptions: (navigationData)=>{
+            return{
+                headerTitle: 'Meal Categories',
+                headerLeft: ()=>(
+                    <HeaderButtons HeaderButtonComponent={MaterialIconHeaderButton}>             
+                        <Item title="favorite" iconName="menu" onPress={()=>navigationData.navigation.toggleDrawer()} />
+                    </HeaderButtons>)
+            }            
+        }},
+},
+{
+    defaultNavigationOptions: {
+        headerStyle: {
+            backgroundColor: '#4a148c'
+          },
+          headerTintColor: 'white'
+    }
+});
+
 const AppTabNavigator = createBottomTabNavigator({
     Meals: {
-        screen: MealsNavigator,
+        screen: MealsStackNavigator,
         navigationOptions:{
             tabBarIcon: tab=><Ionicons name="ios-restaurant" size={24} color="black" />
         }
@@ -43,6 +77,11 @@ const AppTabNavigator = createBottomTabNavigator({
             tabBarIcon: tab=><Ionicons name="ios-star" size={24} color="black" />
         }
     }
-})
+});
 
-export default createAppContainer(AppTabNavigator);
+const drawer = createDrawerNavigator({
+    Meals: AppTabNavigator,
+    Filters: FiltersStackNavigation
+});
+
+export default createAppContainer(drawer);
