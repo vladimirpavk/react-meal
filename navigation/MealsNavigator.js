@@ -47,7 +47,7 @@ const FiltersStackNavigation = createStackNavigator({
         screen: FiltersScreen,
         navigationOptions: (navigationData)=>{
             return{
-                headerTitle: 'Meal Categories',
+                headerTitle: 'Filters',
                 headerLeft: ()=>(
                     <HeaderButtons HeaderButtonComponent={MaterialIconHeaderButton}>             
                         <Item title="favorite" iconName="menu" onPress={()=>navigationData.navigation.toggleDrawer()} />

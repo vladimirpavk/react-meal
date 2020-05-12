@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   StyleSheet,
   Text,
@@ -20,11 +20,19 @@ const MealDetailsScreen = (props) => {
   
   const meal = mealTemp[0];
 
+  const [isFavorite, setIsFavorite] = useState(false);
   useEffect(
-    ()=>{
-      props.navigation.setParams({mealTitle: meal.title})
-    }, [meal]
-  );
+      ()=>{          
+        setIsFavorite(props.favoriteMeals.filter((item)=>item.id===meal.id).length===0 ? false : true);
+        props.navigation.setParams(
+          {
+            mealItem: meal,
+            atf: props.addToFavorite,
+            isFav: isFavorite,
+            setIsFav: setIsFavorite
+          });
+      }, [meal, isFavorite]
+    );   
 
   const ingredientsList = meal.ingredients.map(
     (ingredient)=><Text key={Math.random()} style={styles.item}>{ingredient}</Text>
@@ -58,14 +66,29 @@ const MealDetailsScreen = (props) => {
 }
 
 MealDetailsScreen.navigationOptions = (navigationData)=>{  
-  return {
-    headerTitle: navigationData.navigation.getParam('mealTitle'),
+  console.log(navigationData.navigation);
+
+  return navigationData.navigation.getParam('mealItem') ?
+  {
+    headerTitle: navigationData.navigation.getParam('mealItem').title,
     headerRight: ()=>(
       <HeaderButtons HeaderButtonComponent={MaterialIconHeaderButton}>             
-        <Item title="favorite" iconName="favorite-border" onPress={() => alert('search border')} />
+        <Item
+          title="favorite"
+          iconName={navigationData.navigation.getParam('isFav') ? "favorite" : "favorite-border"}
+          onPress={
+            () =>{
+              const f1=navigationData.navigation.getParam('atf');              
+              f1(navigationData.navigation.getParam('mealItem'));
+              const f2=navigationData.navigation.getParam('setIsFav'); 
+              f2(true);
+            }
+            } />
       </HeaderButtons>
     )
   }
+  :
+  {}
 }
 
 const styles = StyleSheet.create({
@@ -101,8 +124,15 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = (state)=>{
   return{
-    meals: state.meals
+    meals: state.meals,
+    favoriteMeals: state.favoriteMeals  
   }
 }
 
-export default connect(mapStateToProps)(MealDetailsScreen);
+const mapDispatchToProps = (dispatch)=>{
+  return{
+    addToFavorite: (favMeal)=>dispatch({type:'ADD_FAVORITE_MEAL', payload:favMeal})  
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(MealDetailsScreen);
