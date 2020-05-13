@@ -17,22 +17,38 @@ import MealItem from '../components/MealItem';
 const MealDetailsScreen = (props) => {  
   const mealId = props.navigation.getParam('mealId');
   const mealTemp = props.meals.filter((element)=>element.id===mealId);
-  
   const meal = mealTemp[0];
 
-  const [isFavorite, setIsFavorite] = useState(false);
+  const [isFavorite, setIsFavorite] = useState(false)  
+   
   useEffect(
-      ()=>{          
-        setIsFavorite(props.favoriteMeals.filter((item)=>item.id===meal.id).length===0 ? false : true);
-        props.navigation.setParams(
-          {
-            mealItem: meal,
-            atf: props.addToFavorite,
-            isFav: isFavorite,
-            setIsFav: setIsFavorite
-          });
-      }, [meal, isFavorite]
+      ()=>{
+        //console.log('meal Effect');
+        props.navigation.setParams({mealItem: meal})
+      }, [meal]
     );   
+
+  useEffect(
+    ()=>{
+      //console.log('toggleFavorite Effect');
+      props.navigation.setParams({toggleFavorite: props.toggleFavorite})
+    }, [props.toggleFavorite]
+  );   
+
+  useEffect(
+    ()=>{
+      //console.log('isFavorite Effect');
+      setIsFavorite(props.favoriteMeals.filter((item)=>item.id===meal.id).length===0 ? false : true);
+      props.navigation.setParams({isFav: isFavorite})
+    }, [isFavorite]
+  );
+
+  useEffect(
+    ()=>{
+      //console.log('toggleFavorite Effect');
+      props.navigation.setParams({toggleFavoriteState: setIsFavorite})
+    }, [setIsFavorite]
+  );  
 
   const ingredientsList = meal.ingredients.map(
     (ingredient)=><Text key={Math.random()} style={styles.item}>{ingredient}</Text>
@@ -66,11 +82,11 @@ const MealDetailsScreen = (props) => {
 }
 
 MealDetailsScreen.navigationOptions = (navigationData)=>{  
-  console.log(navigationData.navigation);
+  const mealItem = navigationData.navigation.getParam('mealItem');
 
-  return navigationData.navigation.getParam('mealItem') ?
+  return mealItem ?
   {
-    headerTitle: navigationData.navigation.getParam('mealItem').title,
+    headerTitle: mealItem.title,
     headerRight: ()=>(
       <HeaderButtons HeaderButtonComponent={MaterialIconHeaderButton}>             
         <Item
@@ -78,10 +94,10 @@ MealDetailsScreen.navigationOptions = (navigationData)=>{
           iconName={navigationData.navigation.getParam('isFav') ? "favorite" : "favorite-border"}
           onPress={
             () =>{
-              const f1=navigationData.navigation.getParam('atf');              
-              f1(navigationData.navigation.getParam('mealItem'));
-              const f2=navigationData.navigation.getParam('setIsFav'); 
-              f2(true);
+              const toggleFavorites=navigationData.navigation.getParam('toggleFavorite');              
+              toggleFavorites(mealItem);
+              const toggleFavoriteState=navigationData.navigation.getParam('toggleFavoriteState');
+              toggleFavoriteState(!navigationData.navigation.getParam('isFav'));
             }
             } />
       </HeaderButtons>
@@ -131,7 +147,7 @@ const mapStateToProps = (state)=>{
 
 const mapDispatchToProps = (dispatch)=>{
   return{
-    addToFavorite: (favMeal)=>dispatch({type:'ADD_FAVORITE_MEAL', payload:favMeal})  
+    toggleFavorite: (favMeal)=>dispatch({type:'TOGGLE_FAVORITE_MEAL', payload:favMeal})  
   }
 }
 
