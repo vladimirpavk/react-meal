@@ -12,7 +12,7 @@ import { connect } from 'react-redux';
 
 import { CATEGORIES } from '../data/dummy-data';
 
-import MealItem from '../components/MealItem';
+import MealList from '../components/MealList';
 
 const CategoryMealsScreen = (props) => {  
 
@@ -26,19 +26,7 @@ const CategoryMealsScreen = (props) => {
         }
       }
     );
-  }
-  
-  const renderListItem = (item)=>{
-    return(
-        <MealItem
-        onMealPressed={()=>onMealPressed(item.item.id)}
-        imageUrl={item.item.imageUrl}
-        mealTitle={item.item.title}
-        duration={item.item.duration}
-        complexity={item.item.complexity}
-        affordability={item.item.affordability} />
-    )
-  }
+  }  
 
   let filteredMeals = props.meals.filter(
     (item)=>
@@ -49,12 +37,7 @@ const CategoryMealsScreen = (props) => {
 
   return (
     <View style={styles.container}>
-      <FlatList
-        style={styles.flatListStyle}
-        keyExtractor={(item, index) => item.id}
-        data={filteredMeals}
-        renderItem={renderListItem}
-        numColumns={1}/>
+        <MealList meals={filteredMeals} onMealPressed={onMealPressed} />
     </View>
   );
 }
@@ -72,9 +55,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff'
-  },
-  flatListStyle:{
-    flex:1
   }
 });
 

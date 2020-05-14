@@ -1,10 +1,14 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
+import { connect } from 'react-redux';
+
+import MealList from '../components/MealList';
+
 const FavoritesScreen = (props) => {
   return (
     <View style={styles.container}>
-      <Text>Favorite meals screen...</Text>
+      <MealList meals={props.favoriteMeals} />
     </View>
   );
 }
@@ -13,9 +17,14 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
+    padding: 5
+  }
 });
 
-export default FavoritesScreen;
+const mapPropsToState = (state)=>{
+  return {
+    'favoriteMeals': state.favoriteMeals
+  }   
+}
+
+export default connect(mapPropsToState)(FavoritesScreen);

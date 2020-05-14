@@ -48,21 +48,32 @@ const FiltersStackNavigation = createStackNavigator({
         navigationOptions: (navigationData)=>{
             return{
                 headerTitle: 'Filters',
+                headerStyle: {
+                    backgroundColor: '#4a148c'
+                  },
+                headerTintColor: 'white',
                 headerLeft: ()=>(
                     <HeaderButtons HeaderButtonComponent={MaterialIconHeaderButton}>             
                         <Item title="favorite" iconName="menu" onPress={()=>navigationData.navigation.toggleDrawer()} />
                     </HeaderButtons>)
             }            
         }},
-},
-{
-    defaultNavigationOptions: {
-        headerStyle: {
-            backgroundColor: '#4a148c'
-          },
-          headerTintColor: 'white'
-    }
 });
+
+const FavoritesStackNavigation = createStackNavigator({
+    'Favorites' : {
+        screen: FavoritesScreen,
+        navigationOptions: (navigationData)=>{
+            return{
+                headerTitle: 'Favorite Meals',
+                headerStyle: {
+                    backgroundColor: '#4a148c'
+                  },
+                headerTintColor: 'white'                
+            }
+        }
+    }
+})
 
 const AppTabNavigator = createBottomTabNavigator({
     Meals: {
@@ -72,7 +83,7 @@ const AppTabNavigator = createBottomTabNavigator({
         }
     },
     Favorites: {
-        screen: FavoritesScreen,
+        screen: FavoritesStackNavigation,
         navigationOptions:{
             tabBarIcon: tab=><Ionicons name="ios-star" size={24} color="black" />
         }
