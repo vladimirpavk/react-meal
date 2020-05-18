@@ -1,10 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   StyleSheet,
   Text,
   View,
   Switch
 } from 'react-native';
+
+import { connect } from 'react-redux';
+
+import { MaterialIcons } from '@expo/vector-icons';
+import { HeaderButtons, Item } from 'react-navigation-header-buttons';
+import { MaterialIconHeaderButton } from '../components/MaterialIconHeaderButton';
 
 const FilterSwitch = (props)=>{
   return(
@@ -24,6 +30,23 @@ const FiltersScreen = (props) => {
   const [isLactoseFree, setIsLactoseFree]=useState(false);
   const [isVegan, setIsVegan]=useState(false);
   const [isVegetarian, setIsVegetarian]=useState(false);
+
+  const filters = {
+    isGlutenFree: isGlutenFree,
+    isVegan: isVegan,
+    isVegetarian: isVegetarian,
+    isLactoseFree: isLactoseFree
+  }
+
+  useEffect(
+    ()=>{
+      props.navigation.setParams(
+        {
+          applyFilters: props.applyFilters,
+          filters: filters
+        })
+    }, [props.applyFilters]
+  );   
 
   return (
     <View style={styles.container}>
@@ -52,6 +75,21 @@ const FiltersScreen = (props) => {
   );
 }
 
+FiltersScreen.navigationOptions = (navData)=>{
+  const af = navData.navigation.getParam('applyFilters');
+  const filters = navData.navigation.getParam('filters');
+
+  return {    
+    headerRight: ()=>(
+      <HeaderButtons HeaderButtonComponent={MaterialIconHeaderButton}>             
+        <Item
+          title="favorite"
+          iconName="save"
+          onPress={() => af(filters)}/>
+      </HeaderButtons>)
+  }
+}
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -78,4 +116,16 @@ const styles = StyleSheet.create({
   }
 });
 
-export default FiltersScreen;
+const mapPropsToState = (state)=>{
+  return{
+    meals: state.meals
+  }
+}
+
+const mapDispatchToProps = (dispatch)=>{
+  return{
+    applyFilters: (filters)=>dispatch({type:'APPLY_FILTERS', payload:filters})
+  }
+}
+
+export default connect(mapPropsToState, mapDispatchToProps)(FiltersScreen);
