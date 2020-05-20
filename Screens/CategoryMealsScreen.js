@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
 
 const mapPropsToState = (state)=>{
     return{
-        meals: state.meals
+        meals: state.filteredMeals
     }
 }
 

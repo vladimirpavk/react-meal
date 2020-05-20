@@ -27,20 +27,20 @@ export const reducer = (state=initialState, action)=>{
         case 'APPLY_FILTERS':{
             //action.payload is filter
             const filters=action.payload;
-            console.log(filters);
+            //console.log(filters);
 
             let filteredMeals=state.filteredMeals.filter(
                 (meal)=>{
-                    if(filter.isGlutenFree && !meal.isGlutenFree){
+                    if(filters.isGlutenFree && !meal.isGlutenFree){
                         return false;
                     }
-                    if(filter.isVegan && !meal.isVegan){
+                    if(filters.isVegan && !meal.isVegan){
                         return false;
                     }
-                    if(filter.isVegetarian && !meal.isVegetarian){
+                    if(filters.isVegetarian && !meal.isVegetarian){
                         return false;
                     }
-                    if(filter.isLactoseFree && !meal.isLactoseFree){
+                    if(filters.isLactoseFree && !meal.isLactoseFree){
                         return false;
                     }
                     return true;
